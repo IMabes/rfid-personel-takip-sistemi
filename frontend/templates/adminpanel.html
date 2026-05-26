@@ -1,0 +1,841 @@
+<!doctype html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="SecureRoom AI RFID kart ve kullanıcı yönetim paneli"
+    />
+    <title>SecureRoom AI — Admin Panel</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="/static/adminpanel.css" />
+  </head>
+  <body>
+    <div class="app-shell" id="appShell">
+      <aside
+        class="sidebar"
+        id="sidebar"
+        role="navigation"
+        aria-label="Ana menü"
+      >
+        <div class="sidebar__brand">
+          <div class="sidebar__logo" aria-hidden="true">
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M5 12.55a11 11 0 0 1 14.08 0" />
+              <path d="M1.42 9a16 16 0 0 1 21.16 0" />
+              <path d="M8.53 16.11a6 6 0 0 1 6.95 0" />
+              <circle cx="12" cy="20" r="1" fill="currentColor" />
+            </svg>
+          </div>
+          <div class="sidebar__brand-text">
+            <span class="sidebar__brand-name">SecureRoom AI</span>
+            <span class="sidebar__brand-sub">Admin Suite</span>
+          </div>
+        </div>
+
+        <nav class="sidebar__nav">
+          <p class="sidebar__nav-label">Menü</p>
+          <ul class="sidebar__nav-list" role="list">
+            <li>
+              <a
+                href="#"
+                class="sidebar__nav-link"
+                data-page="dashboard"
+                role="menuitem"
+              >
+                <svg
+                  class="nav-icon"
+                  width="17"
+                  height="17"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <rect x="3" y="3" width="7" height="7" rx="1.5" />
+                  <rect x="14" y="3" width="7" height="7" rx="1.5" />
+                  <rect x="3" y="14" width="7" height="7" rx="1.5" />
+                  <rect x="14" y="14" width="7" height="7" rx="1.5" />
+                </svg>
+                <span>Genel Bakış</span>
+              </a>
+            </li>
+            <li>
+              <a
+                href="#"
+                class="sidebar__nav-link sidebar__nav-link--active"
+                data-page="rfid"
+                role="menuitem"
+                aria-current="page"
+              >
+                <svg
+                  class="nav-icon"
+                  width="17"
+                  height="17"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <rect x="2" y="5" width="20" height="14" rx="2" />
+                  <path d="M2 10h20" />
+                  <circle cx="7" cy="15" r="1" fill="currentColor" />
+                  <path d="M11 15h6" stroke-width="2" />
+                </svg>
+                <span>RFID Kartlar</span>
+                <span class="nav-badge" id="navBadge">—</span>
+              </a>
+            </li>
+            <li>
+              <a
+                href="#"
+                class="sidebar__nav-link"
+                data-page="logs"
+                role="menuitem"
+              >
+                <svg
+                  class="nav-icon"
+                  width="17"
+                  height="17"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"
+                  />
+                  <polyline points="14 2 14 8 20 8" />
+                  <line x1="16" y1="13" x2="8" y2="13" />
+                  <line x1="16" y1="17" x2="8" y2="17" />
+                </svg>
+                <span>Giriş Logları</span>
+              </a>
+            </li>
+            <li>
+              <a
+                href="#"
+                class="sidebar__nav-link"
+                data-page="reporting"
+                role="menuitem"
+              >
+                <svg
+                  class="nav-icon"
+                  width="17"
+                  height="17"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                  stroke-linecap="round"
+                  aria-hidden="true"
+                >
+                  <line x1="18" y1="20" x2="18" y2="10" />
+                  <line x1="12" y1="20" x2="12" y2="4" />
+                  <line x1="6" y1="20" x2="6" y2="14" />
+                </svg>
+                <span>Raporlama</span>
+              </a>
+            </li>
+            <li>
+              <a
+                href="#"
+                class="sidebar__nav-link"
+                data-page="settings"
+                role="menuitem"
+              >
+                <svg
+                  class="nav-icon"
+                  width="17"
+                  height="17"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <circle cx="12" cy="12" r="3" />
+                  <path
+                    d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"
+                  />
+                </svg>
+                <span>Ayarlar</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
+
+        <div class="sidebar__footer">
+          <div class="system-status">
+            <span
+              class="system-status__dot"
+              id="statusDot"
+              aria-label="Sistem çevrimiçi"
+            ></span>
+            <span class="system-status__label" id="statusLabel"
+              >Sistem Aktif</span
+            >
+          </div>
+          <div class="sidebar__user">
+            <div class="avatar avatar--sm" aria-hidden="true">İK</div>
+            <div class="sidebar__user-info">
+              <span class="sidebar__user-name">İrem Kılıçer</span>
+              <span class="sidebar__user-role">System Admin</span>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <div class="main-wrapper">
+        <header class="topbar" role="banner">
+          <button
+            class="topbar__menu-btn"
+            id="sidebarToggle"
+            aria-label="Menüyü aç/kapat"
+            aria-expanded="false"
+            aria-controls="sidebar"
+          >
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+            >
+              <line x1="3" y1="6" x2="21" y2="6" />
+              <line x1="3" y1="12" x2="21" y2="12" />
+              <line x1="3" y1="18" x2="21" y2="18" />
+            </svg>
+          </button>
+
+          <div class="topbar__breadcrumb">
+            <h1 class="topbar__page-title" id="pageTitle">
+              RFID Kart Yönetimi
+            </h1>
+            <p class="topbar__page-sub">SecureRoom AI erişim kontrol paneli</p>
+          </div>
+
+          <div class="topbar__search" role="search">
+            <svg
+              class="topbar__search-icon"
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <circle cx="11" cy="11" r="8" />
+              <line x1="21" y1="21" x2="16.65" y2="16.65" />
+            </svg>
+            <input
+              type="search"
+              class="topbar__search-input"
+              id="globalSearch"
+              placeholder="Kart, kullanıcı veya UID ara…"
+              aria-label="Arama"
+              autocomplete="off"
+            />
+          </div>
+
+          <div class="topbar__actions">
+            <div class="topbar__action-wrap" id="notifWrap">
+              <button
+                class="topbar__icon-btn"
+                id="notifBtn"
+                aria-label="Bildirimler"
+                aria-haspopup="true"
+                aria-expanded="false"
+              >
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+                  <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+                </svg>
+                <span
+                  class="notif-badge"
+                  id="notifCount"
+                  aria-label="3 okunmamış bildirim"
+                  >3</span
+                >
+              </button>
+              <div
+                class="dropdown notif-dropdown"
+                id="notifDropdown"
+                role="menu"
+                aria-label="Bildirimler"
+                hidden
+              >
+                <div class="dropdown__header">
+                  <span>Bildirimler</span>
+                  <button class="dropdown__mark-read" id="markAllRead">
+                    Tümünü okundu yap
+                  </button>
+                </div>
+                <ul class="notif-list" role="list">
+                  <li class="notif-item notif-item--unread" role="menuitem">
+                    <div
+                      class="notif-item__icon notif-item__icon--warn"
+                      aria-hidden="true"
+                    >
+                      !
+                    </div>
+                    <div class="notif-item__body">
+                      <p class="notif-item__text">
+                        Atanmamış kartlar takip edilmeli
+                      </p>
+                      <time class="notif-item__time">5 dk önce</time>
+                    </div>
+                  </li>
+                  <li class="notif-item notif-item--unread" role="menuitem">
+                    <div
+                      class="notif-item__icon notif-item__icon--info"
+                      aria-hidden="true"
+                    >
+                      i
+                    </div>
+                    <div class="notif-item__body">
+                      <p class="notif-item__text">Kart yönetimi paneli aktif</p>
+                      <time class="notif-item__time">1 saat önce</time>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="topbar__action-wrap" id="profileWrap">
+              <button
+                class="topbar__profile-btn"
+                id="profileBtn"
+                aria-haspopup="true"
+                aria-expanded="false"
+              >
+                <div class="avatar avatar--md" aria-hidden="true">İK</div>
+                <div class="topbar__profile-text">
+                  <span class="topbar__profile-name">İrem Kılıçer</span>
+                  <span class="topbar__profile-role">System Admin</span>
+                </div>
+                <svg
+                  width="13"
+                  height="13"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  aria-hidden="true"
+                >
+                  <polyline points="6 9 12 15 18 9" />
+                </svg>
+              </button>
+              <div
+                class="dropdown profile-dropdown"
+                id="profileDropdown"
+                role="menu"
+                hidden
+              >
+                <div class="dropdown__header dropdown__header--stacked">
+                  <span>İrem Kılıçer</span>
+                  <small>Admin hesabı</small>
+                </div>
+                <ul role="list">
+                  <li>
+                    <button class="dropdown__item" role="menuitem">
+                      Profil
+                    </button>
+                  </li>
+                  <li>
+                    <button class="dropdown__item" role="menuitem">
+                      Ayarlar
+                    </button>
+                  </li>
+                  <li class="dropdown__divider" role="separator"></li>
+                  <li>
+                    <button
+                      class="dropdown__item dropdown__item--danger"
+                      role="menuitem"
+                    >
+                      Çıkış
+                    </button>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        <main class="main-content" id="mainContent" role="main">
+          <section
+            class="page page--rfid"
+            id="page-rfid"
+            aria-label="RFID Kart Yönetimi"
+          >
+            <section class="hero-panel" aria-label="Admin panel özeti">
+              <div>
+                <span class="hero-panel__eyebrow">SecureRoom AI</span>
+                <h2>RFID kartlarını veritabanı üzerinden yönet</h2>
+                <p>
+                  Kullanıcıya kart tanımla, kartı aktif/pasif yap ve erişim
+                  kayıtlarını adım adım profesyonel bir sisteme dönüştür.
+                </p>
+              </div>
+              <button class="btn btn--primary" id="btnAddCard" type="button">
+                <svg
+                  width="15"
+                  height="15"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.5"
+                  stroke-linecap="round"
+                  aria-hidden="true"
+                >
+                  <line x1="12" y1="5" x2="12" y2="19" />
+                  <line x1="5" y1="12" x2="19" y2="12" />
+                </svg>
+                Yeni RFID Kart Ekle
+              </button>
+            </section>
+
+            <div
+              class="kpi-grid"
+              role="region"
+              aria-label="Kart istatistikleri"
+            >
+              <article class="kpi-card">
+                <div
+                  class="kpi-card__icon kpi-card__icon--blue"
+                  aria-hidden="true"
+                >
+                  <svg
+                    width="19"
+                    height="19"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <rect x="2" y="5" width="20" height="14" rx="2" />
+                    <path d="M2 10h20" />
+                  </svg>
+                </div>
+                <div class="kpi-card__body">
+                  <span class="kpi-card__label">Toplam Kart</span>
+                  <strong class="kpi-card__value" id="kpiTotal">—</strong>
+                  <span class="kpi-card__sub">Sisteme kayıtlı</span>
+                </div>
+              </article>
+              <article class="kpi-card">
+                <div
+                  class="kpi-card__icon kpi-card__icon--green"
+                  aria-hidden="true"
+                >
+                  <svg
+                    width="19"
+                    height="19"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <polyline points="20 6 9 17 4 12" />
+                  </svg>
+                </div>
+                <div class="kpi-card__body">
+                  <span class="kpi-card__label">Aktif Kart</span>
+                  <strong class="kpi-card__value" id="kpiActive">—</strong>
+                  <span class="kpi-card__sub" id="kpiActivePct">—</span>
+                </div>
+              </article>
+              <article class="kpi-card">
+                <div
+                  class="kpi-card__icon kpi-card__icon--amber"
+                  aria-hidden="true"
+                >
+                  <svg
+                    width="19"
+                    height="19"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <circle cx="12" cy="12" r="10" />
+                    <line x1="12" y1="8" x2="12" y2="12" />
+                    <line x1="12" y1="16" x2="12.01" y2="16" />
+                  </svg>
+                </div>
+                <div class="kpi-card__body">
+                  <span class="kpi-card__label">Pasif Kart</span>
+                  <strong class="kpi-card__value" id="kpiInactive">—</strong>
+                  <span class="kpi-card__sub">Erişimi kapalı</span>
+                </div>
+              </article>
+              <article class="kpi-card">
+                <div
+                  class="kpi-card__icon kpi-card__icon--violet"
+                  aria-hidden="true"
+                >
+                  <svg
+                    width="19"
+                    height="19"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                    <circle cx="12" cy="7" r="4" />
+                    <line x1="18" y1="8" x2="23" y2="13" />
+                    <line x1="23" y1="8" x2="18" y2="13" />
+                  </svg>
+                </div>
+                <div class="kpi-card__body">
+                  <span class="kpi-card__label">Atanmamış</span>
+                  <strong class="kpi-card__value" id="kpiPending">—</strong>
+                  <span class="kpi-card__sub">Kullanıcıya bağlı değil</span>
+                </div>
+              </article>
+            </div>
+
+            <section class="table-section" aria-label="RFID kart tablosu">
+              <div class="table-toolbar">
+                <div class="table-toolbar__left">
+                  <h2 class="table-toolbar__title">Kayıtlı RFID Kartlar</h2>
+                  <span
+                    class="table-toolbar__count"
+                    id="tableCount"
+                    aria-live="polite"
+                    >Yükleniyor…</span
+                  >
+                </div>
+                <div class="table-toolbar__filters">
+                  <select
+                    class="filter-select"
+                    id="filterRole"
+                    aria-label="Role göre filtrele"
+                  >
+                    <option value="">Tüm Roller</option>
+                    <option value="Admin">Admin</option>
+                    <option value="Supervisor">Supervisor</option>
+                    <option value="Operator">Operator</option>
+                    <option value="Technician">Technician</option>
+                    <option value="Guest">Guest</option>
+                  </select>
+                  <select
+                    class="filter-select"
+                    id="filterStatus"
+                    aria-label="Duruma göre filtrele"
+                  >
+                    <option value="">Tüm Durumlar</option>
+                    <option value="active">Aktif</option>
+                    <option value="inactive">Pasif</option>
+                  </select>
+                </div>
+              </div>
+              <div
+                class="table-container"
+                id="tableContainer"
+                aria-live="polite"
+                aria-atomic="false"
+              ></div>
+              <div
+                class="table-pagination"
+                id="tablePagination"
+                aria-label="Sayfalama"
+                hidden
+              >
+                <div class="pagination__info" id="paginationInfo"></div>
+                <div
+                  class="pagination__controls"
+                  id="paginationControls"
+                  role="group"
+                  aria-label="Sayfa seçimi"
+                ></div>
+              </div>
+            </section>
+          </section>
+
+          <section
+            class="page page--placeholder"
+            id="page-dashboard"
+            hidden
+            aria-label="Genel Bakış"
+          >
+            <div class="placeholder-page">
+              <span class="placeholder-page__tag">Hazırlanıyor</span>
+              <h2>Genel Bakış</h2>
+              <p>
+                Burada sistem özeti, son girişler ve hızlı durum kartları
+                olacak.
+              </p>
+            </div>
+          </section>
+          <section
+            class="page page--logs"
+            id="page-logs"
+            hidden
+            aria-label="Giriş Logları"
+          >
+            <section class="hero-panel" aria-label="Giriş logları özeti">
+              <div>
+                <span class="hero-panel__eyebrow">Access Logs</span>
+                <h2>Giriş ve deneme kayıtlarını izle</h2>
+                <p>
+                  RFID kart okutmalarını, yetkili girişleri ve yetkisiz
+                  denemeleri buradan takip edebilirsin.
+                </p>
+              </div>
+
+              <button
+                class="btn btn--primary"
+                id="btnRefreshLogs"
+                type="button"
+              >
+                Logları Yenile
+              </button>
+            </section>
+
+            <section class="table-section">
+              <div class="table-toolbar">
+                <div class="table-toolbar__left">
+                  <h3 class="table-toolbar__title">Son Giriş Kayıtları</h3>
+                  <span class="table-toolbar__count" id="logsCount"
+                    >Yükleniyor…</span
+                  >
+                </div>
+
+                <div class="table-toolbar__filters">
+                  <span class="table-toolbar__count" id="logsLastUpdate"
+                    >Henüz güncellenmedi</span
+                  >
+                </div>
+              </div>
+
+              <div
+                class="table-container"
+                id="logsTableContainer"
+                aria-live="polite"
+                aria-atomic="false"
+              >
+                <div class="state-loading">
+                  <div class="spinner" aria-hidden="true"></div>
+                  <p class="state-loading__text">Giriş logları yükleniyor…</p>
+                </div>
+              </div>
+            </section>
+          </section>
+          <section
+            class="page page--placeholder"
+            id="page-reporting"
+            hidden
+            aria-label="Raporlama"
+          >
+            <div class="placeholder-page">
+              <span class="placeholder-page__tag">Hazırlanıyor</span>
+              <h2>Raporlama</h2>
+              <p>Excel/CSV dışa aktarma ve grafikler burada olacak.</p>
+            </div>
+          </section>
+          <section
+            class="page page--placeholder"
+            id="page-settings"
+            hidden
+            aria-label="Ayarlar"
+          >
+            <div class="placeholder-page">
+              <span class="placeholder-page__tag">Hazırlanıyor</span>
+              <h2>Ayarlar</h2>
+              <p>
+                Telegram bildirimi, sistem güvenliği ve cihaz ayarları burada
+                olacak.
+              </p>
+            </div>
+          </section>
+        </main>
+      </div>
+    </div>
+
+    <div class="modal-backdrop" id="modalBackdrop" hidden>
+      <div
+        class="modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="modalTitle"
+      >
+        <div class="modal__header">
+          <div>
+            <h2 class="modal__title" id="modalTitle">Yeni RFID Kart Ekle</h2>
+            <p class="modal__subtitle" id="modalSubtitle">
+              Kart UID değerini kullanıcı ile eşleştir.
+            </p>
+          </div>
+          <button
+            class="modal__close"
+            id="modalClose"
+            type="button"
+            aria-label="Pencereyi kapat"
+          >
+            ×
+          </button>
+        </div>
+
+        <form class="card-form" id="cardForm" novalidate>
+          <input type="hidden" id="formCardId" />
+          <div class="form-group">
+            <label for="formUid">Kart UID</label>
+            <input
+              class="form-input"
+              type="text"
+              id="formUid"
+              placeholder="A3:F2:9C:11"
+              autocomplete="off"
+            />
+            <small class="form-error" id="formUidError"></small>
+          </div>
+          <div class="form-group">
+            <label for="formUsername">Ad Soyad</label>
+            <input
+              class="form-input"
+              type="text"
+              id="formUsername"
+              placeholder="İrem Kılıçer"
+              autocomplete="off"
+            />
+            <small class="form-error" id="formUsernameError"></small>
+          </div>
+          <div class="form-row form-row--2col">
+            <div class="form-group">
+              <label for="formRole">Rol</label>
+              <select class="form-input" id="formRole">
+                <option value="">Rol seç</option>
+                <option value="Admin">Admin</option>
+                <option value="Supervisor">Supervisor</option>
+                <option value="Operator">Operator</option>
+                <option value="Technician">Technician</option>
+                <option value="Guest">Guest</option>
+              </select>
+              <small class="form-error" id="formRoleError"></small>
+            </div>
+            <div class="form-group">
+              <label for="formDept">Departman</label>
+              <input
+                class="form-input"
+                type="text"
+                id="formDept"
+                placeholder="Örn: IT"
+                autocomplete="off"
+              />
+            </div>
+          </div>
+          <label class="switch-row">
+            <input type="checkbox" id="formActive" checked />
+            <span class="switch-ui" aria-hidden="true"></span>
+            <span id="formActiveLabel">Active</span>
+          </label>
+        </form>
+
+        <div class="modal__footer">
+          <button class="btn btn--ghost" type="button" id="modalCancelBtn">
+            Vazgeç
+          </button>
+          <button
+            class="btn btn--primary"
+            type="submit"
+            id="modalSaveBtn"
+            form="cardForm"
+          >
+            <span id="modalSaveBtnText">Kartı Kaydet</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-backdrop" id="deleteBackdrop" hidden>
+      <div class="modal modal--sm" role="dialog" aria-modal="true">
+        <div class="modal__header">
+          <div>
+            <h2 class="modal__title">Kartı Sil</h2>
+            <p class="modal__subtitle">Bu işlem kartı sistemden kaldırır.</p>
+          </div>
+          <button
+            class="modal__close"
+            id="deleteClose"
+            type="button"
+            aria-label="Pencereyi kapat"
+          >
+            ×
+          </button>
+        </div>
+        <div class="delete-preview" id="deletePreview"></div>
+        <div class="modal__footer">
+          <button class="btn btn--ghost" type="button" id="deleteCancelBtn">
+            Vazgeç
+          </button>
+          <button class="btn btn--danger" type="button" id="deleteConfirmBtn">
+            Sil
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="toast-container"
+      id="toastContainer"
+      aria-live="polite"
+      aria-atomic="true"
+    ></div>
+
+    <script src="/static/adminpanel.js"></script>
+  </body>
+</html>

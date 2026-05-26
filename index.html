@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SecureRoom AI Dashboard</title>
+    <link rel="stylesheet" href="/static/style.css">
+    
+</head>
+<body>
+
+    <div class="container">
+        <header class="header">
+            <div>
+                <h1>SecureRoom AI</h1>
+                <p>RFID Tabanlı Akıllı Oda Giriş Sistemi</p>
+            </div>
+
+            <button onclick="createTestEvent()" class="test-btn">
+                Test Kaydı Oluştur
+            </button>
+        </header>
+
+        <section class="stats">
+            <div class="stat-card">
+                <h3>Toplam Olay</h3>
+                <p id="totalCount">0</p>
+            </div>
+
+            <div class="stat-card success">
+                <h3>Yetkili Giriş</h3>
+                <p id="authorizedCount">0</p>
+            </div>
+
+            <div class="stat-card danger">
+                <h3>Yetkisiz Deneme</h3>
+                <p id="unauthorizedCount">0</p>
+            </div>
+        </section>
+
+        <section class="panel">
+            <div class="panel-header">
+                <h2>Son Giriş Kayıtları</h2>
+                <span id="lastUpdate">Henüz güncellenmedi</span>
+            </div>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Kart UID</th>
+                            <th>Durum</th>
+                            <th>Mesaj</th>
+                            <th>Tarih / Saat</th>
+                        </tr>
+                    </thead>
+                    <tbody id="eventsTable">
+                        <tr>
+                            <td colspan="5" class="empty">Kayıt yükleniyor...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+
+    <script src="/static/app.js"></script>
+</body>
+</html>

@@ -3,12 +3,18 @@ from flask_cors import CORS
 import sqlite3
 from datetime import datetime
 
+from flask import Flask, request, jsonify, send_from_directory
+import sqlite3
+import os
+
+BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+
 app = Flask(
     __name__,
-    template_folder="../frontend/templates",
-    static_folder="../frontend/static",
+    static_folder=os.path.join(BASE_DIR, "frontend", "static"),
     static_url_path="/static"
 )
+
 
 
 
@@ -54,12 +60,11 @@ def create_database():
 
 @app.route("/")
 def index():
-    return render_template("index.html")
-
+    return send_from_directory(BASE_DIR, "index.html")
 
 @app.route("/admin")
 def admin_panel():
-    return render_template("adminpanel.html")
+    return send_from_directory(os.path.join(BASE_DIR, "frontend/templates"), "adminpanel.html")
 
 
 @app.route("/api/event", methods=["POST"])

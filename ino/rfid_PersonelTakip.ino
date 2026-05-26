@@ -5,10 +5,10 @@
 #include <HTTPClient.h>
 
 
-const char* ssid = "FiberHGW_TPC108";
-const char* password = "ypmPbWcMRe9T";
-const char* serverUrl = "http://192.168.1.104:5000/api/check-card";
-const char* apiKey = "secureroom123";
+const char* ssid = "Wİ-Fİ ADINIZ";
+const char* password = "Wİ-Fİ ŞİFRENİZ";
+const char* serverUrl = "http://IP-ADRESİNİZ/api/check-card";
+const char* apiKey = "APIKEYİINIZ";
 
 
 #define SS_PIN 15

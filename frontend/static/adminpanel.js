@@ -7,7 +7,7 @@
  *   DELETE /api/users/<id>
  */
 
-'use strict';
+"use strict";
 
 const State = {
   cards: [],
@@ -16,12 +16,12 @@ const State = {
   loading: false,
   error: null,
 
-  activePage: 'rfid',
-  search: '',
-  filterRole: '',
-  filterStatus: '',
-  sortKey: 'id',
-  sortDir: 'desc',
+  activePage: "rfid",
+  search: "",
+  filterRole: "",
+  filterStatus: "",
+  sortKey: "id",
+  sortDir: "desc",
 
   currentPage: 1,
   rowsPerPage: 8,
@@ -31,99 +31,102 @@ const State = {
 };
 
 const DOM = {
-  sidebar: document.getElementById('sidebar'),
-  sidebarToggle: document.getElementById('sidebarToggle'),
+  sidebar: document.getElementById("sidebar"),
+  sidebarToggle: document.getElementById("sidebarToggle"),
 
-  kpiTotal: document.getElementById('kpiTotal'),
-  kpiActive: document.getElementById('kpiActive'),
-  kpiActivePct: document.getElementById('kpiActivePct'),
-  kpiInactive: document.getElementById('kpiInactive'),
-  kpiPending: document.getElementById('kpiPending'),
-  navBadge: document.getElementById('navBadge'),
+  kpiTotal: document.getElementById("kpiTotal"),
+  kpiActive: document.getElementById("kpiActive"),
+  kpiActivePct: document.getElementById("kpiActivePct"),
+  kpiInactive: document.getElementById("kpiInactive"),
+  kpiPending: document.getElementById("kpiPending"),
+  navBadge: document.getElementById("navBadge"),
 
-  globalSearch: document.getElementById('globalSearch'),
-  filterRole: document.getElementById('filterRole'),
-  filterStatus: document.getElementById('filterStatus'),
-  btnAddCard: document.getElementById('btnAddCard'),
-  tableCount: document.getElementById('tableCount'),
-  tableContainer: document.getElementById('tableContainer'),
-  tablePagination: document.getElementById('tablePagination'),
-  paginationInfo: document.getElementById('paginationInfo'),
-  paginationControls: document.getElementById('paginationControls'),
+  globalSearch: document.getElementById("globalSearch"),
+  filterRole: document.getElementById("filterRole"),
+  filterStatus: document.getElementById("filterStatus"),
+  btnAddCard: document.getElementById("btnAddCard"),
+  tableCount: document.getElementById("tableCount"),
+  tableContainer: document.getElementById("tableContainer"),
+  tablePagination: document.getElementById("tablePagination"),
+  paginationInfo: document.getElementById("paginationInfo"),
+  paginationControls: document.getElementById("paginationControls"),
 
-  modalBackdrop: document.getElementById('modalBackdrop'),
-  modalTitle: document.getElementById('modalTitle'),
-  modalSubtitle: document.getElementById('modalSubtitle'),
-  modalClose: document.getElementById('modalClose'),
-  modalCancelBtn: document.getElementById('modalCancelBtn'),
-  modalSaveBtn: document.getElementById('modalSaveBtn'),
-  modalSaveBtnText: document.getElementById('modalSaveBtnText'),
-  cardForm: document.getElementById('cardForm'),
-  formCardId: document.getElementById('formCardId'),
-  formUid: document.getElementById('formUid'),
-  formUsername: document.getElementById('formUsername'),
-  formRole: document.getElementById('formRole'),
-  formDept: document.getElementById('formDept'),
-  formActive: document.getElementById('formActive'),
-  formActiveLabel: document.getElementById('formActiveLabel'),
-  formUidError: document.getElementById('formUidError'),
-  formUsernameError: document.getElementById('formUsernameError'),
-  formRoleError: document.getElementById('formRoleError'),
+  modalBackdrop: document.getElementById("modalBackdrop"),
+  modalTitle: document.getElementById("modalTitle"),
+  modalSubtitle: document.getElementById("modalSubtitle"),
+  modalClose: document.getElementById("modalClose"),
+  modalCancelBtn: document.getElementById("modalCancelBtn"),
+  modalSaveBtn: document.getElementById("modalSaveBtn"),
+  modalSaveBtnText: document.getElementById("modalSaveBtnText"),
+  cardForm: document.getElementById("cardForm"),
+  formCardId: document.getElementById("formCardId"),
+  formUid: document.getElementById("formUid"),
+  formUsername: document.getElementById("formUsername"),
+  formRole: document.getElementById("formRole"),
+  formDept: document.getElementById("formDept"),
+  formActive: document.getElementById("formActive"),
+  formActiveLabel: document.getElementById("formActiveLabel"),
+  formUidError: document.getElementById("formUidError"),
+  formUsernameError: document.getElementById("formUsernameError"),
+  formRoleError: document.getElementById("formRoleError"),
 
-  deleteBackdrop: document.getElementById('deleteBackdrop'),
-  deletePreview: document.getElementById('deletePreview'),
-  deleteClose: document.getElementById('deleteClose'),
-  deleteCancelBtn: document.getElementById('deleteCancelBtn'),
-  deleteConfirmBtn: document.getElementById('deleteConfirmBtn'),
+  deleteBackdrop: document.getElementById("deleteBackdrop"),
+  deletePreview: document.getElementById("deletePreview"),
+  deleteClose: document.getElementById("deleteClose"),
+  deleteCancelBtn: document.getElementById("deleteCancelBtn"),
+  deleteConfirmBtn: document.getElementById("deleteConfirmBtn"),
 
-  toastContainer: document.getElementById('toastContainer'),
+  toastContainer: document.getElementById("toastContainer"),
 
-  notifBtn: document.getElementById('notifBtn'),
-  notifDropdown: document.getElementById('notifDropdown'),
-  notifCount: document.getElementById('notifCount'),
-  markAllRead: document.getElementById('markAllRead'),
-  profileBtn: document.getElementById('profileBtn'),
-  profileDropdown: document.getElementById('profileDropdown'),
+  notifBtn: document.getElementById("notifBtn"),
+  notifDropdown: document.getElementById("notifDropdown"),
+  notifCount: document.getElementById("notifCount"),
+  markAllRead: document.getElementById("markAllRead"),
+  profileBtn: document.getElementById("profileBtn"),
+  profileDropdown: document.getElementById("profileDropdown"),
 
-  statusDot: document.getElementById('statusDot'),
-  statusLabel: document.getElementById('statusLabel'),
-  navLinks: document.querySelectorAll('.sidebar__nav-link'),
-  pageTitle: document.getElementById('pageTitle'),
+  statusDot: document.getElementById("statusDot"),
+  statusLabel: document.getElementById("statusLabel"),
+  navLinks: document.querySelectorAll(".sidebar__nav-link"),
+  pageTitle: document.getElementById("pageTitle"),
 
-  btnRefreshLogs: document.getElementById('btnRefreshLogs'),
-  logsTableContainer: document.getElementById('logsTableContainer'),
-  logsCount: document.getElementById('logsCount'),
-  logsLastUpdate: document.getElementById('logsLastUpdate'),
+  btnRefreshLogs: document.getElementById("btnRefreshLogs"),
+  logsTableContainer: document.getElementById("logsTableContainer"),
+  logsCount: document.getElementById("logsCount"),
+  logsLastUpdate: document.getElementById("logsLastUpdate"),
 };
 
 const API = {
   async fetchCards() {
-    const response = await fetch('/api/users', {
-      headers: { 'Accept': 'application/json' },
+    const response = await fetch("/api/users", {
+      headers: { Accept: "application/json" },
     });
 
     if (!response.ok) {
-      throw new Error('Kullanıcılar veritabanından alınamadı. /api/users endpointini kontrol et.');
+      throw new Error(
+        "Kullanıcılar veritabanından alınamadı. /api/users endpointini kontrol et.",
+      );
     }
 
     const users = await response.json();
 
-    return users.map(user => ({
+    return users.map((user) => ({
       id: Number(user.id),
       uid: normalizeUIDForDisplay(user.uid),
-      username: user.name || user.username || '—',
+      username: user.name || user.username || "—",
       initials: buildInitials(user.name || user.username),
       role: normalizeRole(user.role),
-      dept: user.department || user.dept || '—',
+      dept: user.department || user.dept || "—",
       active: Number(user.is_active) === 1 || user.active === true,
-      lastAccess: user.last_access || user.lastAccess || user.created_at || '—',
+      lastAccess: user.last_access || user.lastAccess || user.created_at || "—",
+      photoPath: user.photo_path || null,
     }));
   },
 
   async createCard(data) {
-    const response = await fetch('/api/users', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+    const response = await fetch("/api/users", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         name: data.username,
         uid: normalizeUIDForSave(data.uid),
@@ -136,7 +139,7 @@ const API = {
     const result = await safeJson(response);
 
     if (!response.ok) {
-      throw new Error(result.message || 'Kart eklenemedi.');
+      throw new Error(result.message || "Kart eklenemedi.");
     }
 
     return result;
@@ -144,8 +147,8 @@ const API = {
 
   async updateCard(id, updates) {
     const response = await fetch(`/api/users/${id}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         name: updates.username,
         uid: normalizeUIDForSave(updates.uid),
@@ -153,32 +156,74 @@ const API = {
         department: updates.dept,
         is_active: updates.active ? 1 : 0,
       }),
+
+      async uploadUserPhoto(id, file) {
+        const formData = new FormData();
+        formData.append("photo", file);
+
+        const response = await fetch(`/api/users/${id}/photo`, {
+          method: "POST",
+          body: formData,
+        });
+
+        const result = await safeJson(response);
+
+        if (!response.ok) {
+          throw new Error(result.message || "Fotoğraf yüklenemedi.");
+        }
+
+        return result;
+      },
     });
 
     const result = await safeJson(response);
 
     if (!response.ok) {
-      throw new Error(result.message || 'Kart güncellenemedi.');
+      throw new Error(result.message || "Kart güncellenemedi.");
     }
 
     return result;
   },
 
   async deleteCard(id) {
-    const response = await fetch(`/api/users/${id}`, { method: 'DELETE' });
+    const response = await fetch(`/api/users/${id}`, { method: "DELETE" });
     const result = await safeJson(response);
 
     if (!response.ok) {
-      throw new Error(result.message || 'Kart silinemedi.');
+      throw new Error(result.message || "Kart silinemedi.");
     }
 
     return true;
   },
+
+  async uploadUserPhoto(id, file) {
+    const formData = new FormData();
+    formData.append("photo", file);
+
+    const response = await fetch(`/api/users/${id}/photo`, {
+      method: "POST",
+      body: formData,
+    });
+
+    const result = await safeJson(response);
+
+    if (!response.ok) {
+      throw new Error(result.message || "Fotoğraf yüklenemedi.");
+    }
+
+    return result;
+  },
 };
 
 function esc(value) {
-  const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
-  return String(value ?? '').replace(/[&<>"']/g, char => map[char]);
+  const map = {
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;",
+  };
+  return String(value ?? "").replace(/[&<>"']/g, (char) => map[char]);
 }
 
 async function safeJson(response) {
@@ -190,28 +235,30 @@ async function safeJson(response) {
 }
 
 function buildInitials(name) {
-  if (!name || name === '—') return '?';
-  return String(name)
-    .trim()
-    .split(/\s+/)
-    .filter(Boolean)
-    .slice(0, 2)
-    .map(part => part[0]?.toLocaleUpperCase('tr-TR'))
-    .join('') || '?';
+  if (!name || name === "—") return "?";
+  return (
+    String(name)
+      .trim()
+      .split(/\s+/)
+      .filter(Boolean)
+      .slice(0, 2)
+      .map((part) => part[0]?.toLocaleUpperCase("tr-TR"))
+      .join("") || "?"
+  );
 }
 
 function normalizeRole(role) {
-  if (!role) return 'Guest';
+  if (!role) return "Guest";
   const raw = String(role).trim();
   const lower = raw.toLowerCase();
 
   const roleMap = {
-    admin: 'Admin',
-    supervisor: 'Supervisor',
-    operator: 'Operator',
-    technician: 'Technician',
-    guest: 'Guest',
-    user: 'User',
+    admin: "Admin",
+    supervisor: "Supervisor",
+    operator: "Operator",
+    technician: "Technician",
+    guest: "Guest",
+    user: "User",
   };
 
   return roleMap[lower] || raw;
@@ -219,22 +266,22 @@ function normalizeRole(role) {
 
 function roleClass(role) {
   const map = {
-    Admin: 'admin',
-    Supervisor: 'supervisor',
-    Operator: 'operator',
-    Technician: 'technician',
-    Guest: 'guest',
-    User: 'default',
+    Admin: "admin",
+    Supervisor: "supervisor",
+    Operator: "operator",
+    Technician: "technician",
+    Guest: "guest",
+    User: "default",
   };
 
-  return map[role] || 'default';
+  return map[role] || "default";
 }
 
 function normalizeUIDForDisplay(uid) {
-  if (!uid) return '';
+  if (!uid) return "";
   return String(uid)
-    .replace(/[:\-]/g, ' ')
-    .replace(/\s+/g, ' ')
+    .replace(/[:\-]/g, " ")
+    .replace(/\s+/g, " ")
     .trim()
     .toUpperCase();
 }
@@ -244,50 +291,56 @@ function normalizeUIDForSave(uid) {
 }
 
 function formatUIDInput(raw) {
-  const clean = String(raw || '').replace(/[^a-fA-F0-9]/g, '').toUpperCase().slice(0, 14);
-  return clean.match(/.{1,2}/g)?.join(' ') || clean;
+  const clean = String(raw || "")
+    .replace(/[^a-fA-F0-9]/g, "")
+    .toUpperCase()
+    .slice(0, 14);
+  return clean.match(/.{1,2}/g)?.join(" ") || clean;
 }
 
 function setSystemStatus(isOnline, text = null) {
   if (!DOM.statusDot || !DOM.statusLabel) return;
-  DOM.statusDot.classList.toggle('system-status__dot--error', !isOnline);
-  DOM.statusLabel.textContent = text || (isOnline ? 'Sistem Aktif' : 'Bağlantı Hatası');
+  DOM.statusDot.classList.toggle("system-status__dot--error", !isOnline);
+  DOM.statusLabel.textContent =
+    text || (isOnline ? "Sistem Aktif" : "Bağlantı Hatası");
 }
 
-function showToast(title, desc = '', type = 'info', duration = 3500) {
+function showToast(title, desc = "", type = "info", duration = 3500) {
   if (!DOM.toastContainer) return;
 
-  const icons = { success: '✓', error: '✕', info: 'i', warn: '!' };
-  const toast = document.createElement('div');
+  const icons = { success: "✓", error: "✕", info: "i", warn: "!" };
+  const toast = document.createElement("div");
   toast.className = `toast toast--${type}`;
-  toast.setAttribute('role', 'alert');
+  toast.setAttribute("role", "alert");
   toast.innerHTML = `
-    <div class="toast__icon">${icons[type] || 'i'}</div>
+    <div class="toast__icon">${icons[type] || "i"}</div>
     <div class="toast__body">
       <p class="toast__title">${esc(title)}</p>
-      ${desc ? `<p class="toast__desc">${esc(desc)}</p>` : ''}
+      ${desc ? `<p class="toast__desc">${esc(desc)}</p>` : ""}
     </div>
     <button class="toast__close" type="button" aria-label="Bildirimi kapat">×</button>
   `;
 
   const dismiss = () => {
-    toast.classList.add('toast--leaving');
+    toast.classList.add("toast--leaving");
     setTimeout(() => toast.remove(), 220);
   };
 
-  toast.querySelector('.toast__close')?.addEventListener('click', dismiss);
+  toast.querySelector(".toast__close")?.addEventListener("click", dismiss);
   DOM.toastContainer.appendChild(toast);
   setTimeout(dismiss, duration);
 }
 
 function renderLoadingState() {
-  [DOM.kpiTotal, DOM.kpiActive, DOM.kpiInactive, DOM.kpiPending].forEach(el => {
-    if (el) el.innerHTML = '<span class="kpi-card__value--loading"></span>';
-  });
+  [DOM.kpiTotal, DOM.kpiActive, DOM.kpiInactive, DOM.kpiPending].forEach(
+    (el) => {
+      if (el) el.innerHTML = '<span class="kpi-card__value--loading"></span>';
+    },
+  );
 
-  if (DOM.kpiActivePct) DOM.kpiActivePct.textContent = '—';
-  if (DOM.navBadge) DOM.navBadge.textContent = '…';
-  if (DOM.tableCount) DOM.tableCount.textContent = 'Yükleniyor…';
+  if (DOM.kpiActivePct) DOM.kpiActivePct.textContent = "—";
+  if (DOM.navBadge) DOM.navBadge.textContent = "…";
+  if (DOM.tableCount) DOM.tableCount.textContent = "Yükleniyor…";
   if (DOM.tablePagination) DOM.tablePagination.hidden = true;
 
   if (DOM.tableContainer) {
@@ -301,7 +354,7 @@ function renderLoadingState() {
 }
 
 function renderEmptyState() {
-  if (DOM.tableCount) DOM.tableCount.textContent = '0 kayıt';
+  if (DOM.tableCount) DOM.tableCount.textContent = "0 kayıt";
   if (DOM.tablePagination) DOM.tablePagination.hidden = true;
 
   if (DOM.tableContainer) {
@@ -322,8 +375,8 @@ function renderEmptyState() {
 }
 
 function renderErrorState(message) {
-  setSystemStatus(false, 'Bağlantı Hatası');
-  if (DOM.tableCount) DOM.tableCount.textContent = 'Hata';
+  setSystemStatus(false, "Bağlantı Hatası");
+  if (DOM.tableCount) DOM.tableCount.textContent = "Hata";
   if (DOM.tablePagination) DOM.tablePagination.hidden = true;
 
   if (DOM.tableContainer) {
@@ -331,20 +384,22 @@ function renderErrorState(message) {
       <div class="state-error" role="alert">
         <div>
           <p class="state-error__title">Veritabanı bağlantısı başarısız</p>
-          <p class="state-error__desc">${esc(message || 'Beklenmeyen bir hata oluştu.')}</p>
+          <p class="state-error__desc">${esc(message || "Beklenmeyen bir hata oluştu.")}</p>
           <button class="state-error__retry" id="retryBtn" type="button">Tekrar dene</button>
         </div>
       </div>
     `;
-    document.getElementById('retryBtn')?.addEventListener('click', loadCards);
+    document.getElementById("retryBtn")?.addEventListener("click", loadCards);
   }
 }
 
 function updateKPIs() {
   const total = State.cards.length;
-  const active = State.cards.filter(card => card.active).length;
+  const active = State.cards.filter((card) => card.active).length;
   const inactive = total - active;
-  const pending = State.cards.filter(card => !card.username || card.username === '—').length;
+  const pending = State.cards.filter(
+    (card) => !card.username || card.username === "—",
+  ).length;
   const pct = total === 0 ? 0 : Math.round((active / total) * 100);
 
   if (DOM.kpiTotal) DOM.kpiTotal.textContent = total;
@@ -361,44 +416,52 @@ function applyFiltersAndSort() {
   let list = [...State.cards];
 
   if (search) {
-    list = list.filter(card => {
-      return [card.uid, card.username, card.role, card.dept]
-        .some(value => String(value || '').toLowerCase().includes(search));
+    list = list.filter((card) => {
+      return [card.uid, card.username, card.role, card.dept].some((value) =>
+        String(value || "")
+          .toLowerCase()
+          .includes(search),
+      );
     });
   }
 
   if (State.filterRole) {
-    list = list.filter(card => card.role === State.filterRole);
+    list = list.filter((card) => card.role === State.filterRole);
   }
 
-  if (State.filterStatus === 'active') {
-    list = list.filter(card => card.active);
+  if (State.filterStatus === "active") {
+    list = list.filter((card) => card.active);
   }
 
-  if (State.filterStatus === 'inactive') {
-    list = list.filter(card => !card.active);
+  if (State.filterStatus === "inactive") {
+    list = list.filter((card) => !card.active);
   }
 
   list.sort((a, b) => {
-    const direction = State.sortDir === 'asc' ? 1 : -1;
+    const direction = State.sortDir === "asc" ? 1 : -1;
     let valueA = a[State.sortKey];
     let valueB = b[State.sortKey];
 
-    if (typeof valueA === 'boolean') valueA = valueA ? 1 : 0;
-    if (typeof valueB === 'boolean') valueB = valueB ? 1 : 0;
+    if (typeof valueA === "boolean") valueA = valueA ? 1 : 0;
+    if (typeof valueB === "boolean") valueB = valueB ? 1 : 0;
 
-    if (typeof valueA === 'number' && typeof valueB === 'number') {
+    if (typeof valueA === "number" && typeof valueB === "number") {
       return (valueA - valueB) * direction;
     }
 
-    return String(valueA || '').localeCompare(String(valueB || ''), 'tr-TR', {
-      numeric: true,
-      sensitivity: 'base',
-    }) * direction;
+    return (
+      String(valueA || "").localeCompare(String(valueB || ""), "tr-TR", {
+        numeric: true,
+        sensitivity: "base",
+      }) * direction
+    );
   });
 
   State.filtered = list;
-  State.totalPages = Math.max(1, Math.ceil(State.filtered.length / State.rowsPerPage));
+  State.totalPages = Math.max(
+    1,
+    Math.ceil(State.filtered.length / State.rowsPerPage),
+  );
 
   if (State.currentPage > State.totalPages) {
     State.currentPage = State.totalPages;
@@ -410,11 +473,11 @@ function applyFiltersAndSort() {
 
 function sortArrow(key) {
   if (State.sortKey !== key) return '<i class="th-sort-icon">⇅</i>';
-  return `<i class="th-sort-icon th-sort-icon--active">${State.sortDir === 'asc' ? '↑' : '↓'}</i>`;
+  return `<i class="th-sort-icon th-sort-icon--active">${State.sortDir === "asc" ? "↑" : "↓"}</i>`;
 }
 
 function sortedClass(key) {
-  return State.sortKey === key ? ' class="sorted"' : '';
+  return State.sortKey === key ? ' class="sorted"' : "";
 }
 
 function renderTable() {
@@ -423,38 +486,50 @@ function renderTable() {
   if (State.filtered.length === 0) return renderEmptyState();
 
   const start = (State.currentPage - 1) * State.rowsPerPage + 1;
-  const end = Math.min(State.currentPage * State.rowsPerPage, State.filtered.length);
+  const end = Math.min(
+    State.currentPage * State.rowsPerPage,
+    State.filtered.length,
+  );
 
   if (DOM.tableCount) {
     DOM.tableCount.textContent = `${State.filtered.length} kayıt bulundu`;
   }
 
-  const rows = State.paginated.map(card => `
+  const rows = State.paginated
+    .map(
+      (card) => `
     <tr data-id="${card.id}">
       <td><span class="cell-uid">${esc(card.uid)}</span></td>
       <td>
         <div class="cell-user">
-          <div class="avatar avatar--row" aria-hidden="true">${esc(card.initials)}</div>
+          ${
+            card.photoPath
+              ? `<img class="avatar avatar--row avatar--image" src="${esc(card.photoPath)}" alt="${esc(card.username)} fotoğrafı">`
+              : `<div class="avatar avatar--row" aria-hidden="true">${esc(card.initials)}</div>`
+          }
           <div>
             <p class="cell-user__name">${esc(card.username)}</p>
-            ${card.dept && card.dept !== '—' ? `<p class="cell-user__dept">${esc(card.dept)}</p>` : ''}
+            ${card.dept && card.dept !== "—" ? `<p class="cell-user__dept">${esc(card.dept)}</p>` : ""}
           </div>
         </div>
       </td>
       <td><span class="role-badge role-badge--${roleClass(card.role)}">${esc(card.role)}</span></td>
       <td>
-        <div class="toggle-wrap" title="${card.active ? 'Kartı pasifleştir' : 'Kartı aktifleştir'}">
-          <button class="toggle-btn btn-toggle-card" type="button" data-id="${card.id}" role="switch" aria-checked="${card.active}" aria-label="${card.active ? 'Pasifleştir' : 'Aktifleştir'}">
-            <span class="toggle-track ${card.active ? 'toggle-track--active' : ''}">
-              <span class="toggle-thumb ${card.active ? 'toggle-thumb--active' : ''}"></span>
+        <div class="toggle-wrap" title="${card.active ? "Kartı pasifleştir" : "Kartı aktifleştir"}">
+          <button class="toggle-btn btn-toggle-card" type="button" data-id="${card.id}" role="switch" aria-checked="${card.active}" aria-label="${card.active ? "Pasifleştir" : "Aktifleştir"}">
+            <span class="toggle-track ${card.active ? "toggle-track--active" : ""}">
+              <span class="toggle-thumb ${card.active ? "toggle-thumb--active" : ""}"></span>
             </span>
           </button>
-          <span class="toggle-label ${card.active ? 'toggle-label--active' : ''}">${card.active ? 'Aktif' : 'Pasif'}</span>
+          <span class="toggle-label ${card.active ? "toggle-label--active" : ""}">${card.active ? "Aktif" : "Pasif"}</span>
         </div>
       </td>
       <td class="cell-last-access">${esc(card.lastAccess)}</td>
       <td>
         <div class="action-group">
+          <button class="action-btn action-btn--photo btn-upload-photo" type="button" data-id="${card.id}" title="Kullanıcı fotoğrafı yükle" aria-label="Kullanıcı fotoğrafı yükle">
+            📷
+          </button>
           <button class="action-btn action-btn--edit btn-edit-card" type="button" data-id="${card.id}" title="Kartı düzenle" aria-label="Kartı düzenle">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.1 2.1 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
           </button>
@@ -464,18 +539,20 @@ function renderTable() {
         </div>
       </td>
     </tr>
-  `).join('');
+  `,
+    )
+    .join("");
 
   DOM.tableContainer.innerHTML = `
     <div class="table-scroll">
       <table class="data-table">
         <thead>
           <tr>
-            <th data-sort="uid"${sortedClass('uid')}>Kart UID ${sortArrow('uid')}</th>
-            <th data-sort="username"${sortedClass('username')}>Kullanıcı ${sortArrow('username')}</th>
-            <th data-sort="role"${sortedClass('role')}>Rol ${sortArrow('role')}</th>
-            <th data-sort="active"${sortedClass('active')}>Durum ${sortArrow('active')}</th>
-            <th data-sort="lastAccess"${sortedClass('lastAccess')}>Kayıt Tarihi ${sortArrow('lastAccess')}</th>
+            <th data-sort="uid"${sortedClass("uid")}>Kart UID ${sortArrow("uid")}</th>
+            <th data-sort="username"${sortedClass("username")}>Kullanıcı ${sortArrow("username")}</th>
+            <th data-sort="role"${sortedClass("role")}>Rol ${sortArrow("role")}</th>
+            <th data-sort="active"${sortedClass("active")}>Durum ${sortArrow("active")}</th>
+            <th data-sort="lastAccess"${sortedClass("lastAccess")}>Kayıt Tarihi ${sortArrow("lastAccess")}</th>
             <th style="text-align:right;cursor:default;">İşlem</th>
           </tr>
         </thead>
@@ -488,7 +565,8 @@ function renderTable() {
 }
 
 function renderPagination(start, end) {
-  if (!DOM.tablePagination || !DOM.paginationInfo || !DOM.paginationControls) return;
+  if (!DOM.tablePagination || !DOM.paginationInfo || !DOM.paginationControls)
+    return;
 
   if (State.filtered.length <= State.rowsPerPage) {
     DOM.tablePagination.hidden = true;
@@ -499,17 +577,17 @@ function renderPagination(start, end) {
   DOM.paginationInfo.textContent = `${start}-${end} / ${State.filtered.length} kayıt`;
 
   let buttons = `
-    <button class="page-btn" type="button" data-page="prev" ${State.currentPage === 1 ? 'disabled' : ''}>Önceki</button>
+    <button class="page-btn" type="button" data-page="prev" ${State.currentPage === 1 ? "disabled" : ""}>Önceki</button>
   `;
 
   for (let page = 1; page <= State.totalPages; page++) {
     buttons += `
-      <button class="page-btn ${page === State.currentPage ? 'page-btn--active' : ''}" type="button" data-page="${page}">${page}</button>
+      <button class="page-btn ${page === State.currentPage ? "page-btn--active" : ""}" type="button" data-page="${page}">${page}</button>
     `;
   }
 
   buttons += `
-    <button class="page-btn" type="button" data-page="next" ${State.currentPage === State.totalPages ? 'disabled' : ''}>Sonraki</button>
+    <button class="page-btn" type="button" data-page="next" ${State.currentPage === State.totalPages ? "disabled" : ""}>Sonraki</button>
   `;
 
   DOM.paginationControls.innerHTML = buttons;
@@ -537,14 +615,14 @@ async function loadCards() {
 }
 
 function clearFormErrors() {
-  [DOM.formUidError, DOM.formUsernameError, DOM.formRoleError].forEach(el => {
-    if (el) el.textContent = '';
+  [DOM.formUidError, DOM.formUsernameError, DOM.formRoleError].forEach((el) => {
+    if (el) el.textContent = "";
   });
 }
 
 function resetForm() {
   DOM.cardForm?.reset();
-  if (DOM.formCardId) DOM.formCardId.value = '';
+  if (DOM.formCardId) DOM.formCardId.value = "";
   if (DOM.formActive) DOM.formActive.checked = true;
   updateActiveLabel();
   clearFormErrors();
@@ -552,13 +630,13 @@ function resetForm() {
 
 function openModal() {
   if (DOM.modalBackdrop) DOM.modalBackdrop.hidden = false;
-  document.body.style.overflow = 'hidden';
+  document.body.style.overflow = "hidden";
   setTimeout(() => DOM.formUid?.focus(), 50);
 }
 
 function closeModal() {
   if (DOM.modalBackdrop) DOM.modalBackdrop.hidden = true;
-  document.body.style.overflow = '';
+  document.body.style.overflow = "";
   State.editingCardId = null;
   resetForm();
 }
@@ -567,29 +645,33 @@ function openAddModal() {
   State.editingCardId = null;
   resetForm();
 
-  if (DOM.modalTitle) DOM.modalTitle.textContent = 'Yeni RFID Kart Ekle';
-  if (DOM.modalSubtitle) DOM.modalSubtitle.textContent = 'Kart UID değerini kullanıcıyla eşleştir.';
-  if (DOM.modalSaveBtnText) DOM.modalSaveBtnText.textContent = 'Kartı Kaydet';
+  if (DOM.modalTitle) DOM.modalTitle.textContent = "Yeni RFID Kart Ekle";
+  if (DOM.modalSubtitle)
+    DOM.modalSubtitle.textContent = "Kart UID değerini kullanıcıyla eşleştir.";
+  if (DOM.modalSaveBtnText) DOM.modalSaveBtnText.textContent = "Kartı Kaydet";
 
   openModal();
 }
 
 function openEditModal(id) {
-  const card = State.cards.find(item => item.id === Number(id));
+  const card = State.cards.find((item) => item.id === Number(id));
   if (!card) return;
 
   State.editingCardId = card.id;
   clearFormErrors();
 
-  if (DOM.modalTitle) DOM.modalTitle.textContent = 'RFID Kartı Düzenle';
-  if (DOM.modalSubtitle) DOM.modalSubtitle.textContent = `${card.uid} kartının bilgilerini güncelle.`;
-  if (DOM.modalSaveBtnText) DOM.modalSaveBtnText.textContent = 'Değişiklikleri Kaydet';
+  if (DOM.modalTitle) DOM.modalTitle.textContent = "RFID Kartı Düzenle";
+  if (DOM.modalSubtitle)
+    DOM.modalSubtitle.textContent = `${card.uid} kartının bilgilerini güncelle.`;
+  if (DOM.modalSaveBtnText)
+    DOM.modalSaveBtnText.textContent = "Değişiklikleri Kaydet";
 
   if (DOM.formCardId) DOM.formCardId.value = card.id;
   if (DOM.formUid) DOM.formUid.value = card.uid;
-  if (DOM.formUsername) DOM.formUsername.value = card.username === '—' ? '' : card.username;
+  if (DOM.formUsername)
+    DOM.formUsername.value = card.username === "—" ? "" : card.username;
   if (DOM.formRole) DOM.formRole.value = card.role;
-  if (DOM.formDept) DOM.formDept.value = card.dept === '—' ? '' : card.dept;
+  if (DOM.formDept) DOM.formDept.value = card.dept === "—" ? "" : card.dept;
   if (DOM.formActive) DOM.formActive.checked = card.active;
   updateActiveLabel();
 
@@ -599,33 +681,39 @@ function openEditModal(id) {
 function validateForm() {
   clearFormErrors();
 
-  const uid = DOM.formUid?.value.trim() || '';
-  const username = DOM.formUsername?.value.trim() || '';
-  const role = DOM.formRole?.value || '';
+  const uid = DOM.formUid?.value.trim() || "";
+  const username = DOM.formUsername?.value.trim() || "";
+  const role = DOM.formRole?.value || "";
   let valid = true;
 
   if (!uid) {
-    if (DOM.formUidError) DOM.formUidError.textContent = 'Kart UID zorunludur.';
+    if (DOM.formUidError) DOM.formUidError.textContent = "Kart UID zorunludur.";
     valid = false;
   }
 
   if (!username) {
-    if (DOM.formUsernameError) DOM.formUsernameError.textContent = 'Ad Soyad zorunludur.';
+    if (DOM.formUsernameError)
+      DOM.formUsernameError.textContent = "Ad Soyad zorunludur.";
     valid = false;
   }
 
   if (!role) {
-    if (DOM.formRoleError) DOM.formRoleError.textContent = 'Rol seçmelisin.';
+    if (DOM.formRoleError) DOM.formRoleError.textContent = "Rol seçmelisin.";
     valid = false;
   }
 
   const normalizedUid = normalizeUIDForSave(uid);
-  const duplicate = State.cards.find(card => {
-    return normalizeUIDForSave(card.uid) === normalizedUid && card.id !== State.editingCardId;
+  const duplicate = State.cards.find((card) => {
+    return (
+      normalizeUIDForSave(card.uid) === normalizedUid &&
+      card.id !== State.editingCardId
+    );
   });
 
   if (duplicate) {
-    if (DOM.formUidError) DOM.formUidError.textContent = 'Bu UID zaten başka bir kullanıcıya kayıtlı.';
+    if (DOM.formUidError)
+      DOM.formUidError.textContent =
+        "Bu UID zaten başka bir kullanıcıya kayıtlı.";
     valid = false;
   }
 
@@ -641,7 +729,7 @@ async function handleFormSubmit(event) {
     uid: normalizeUIDForSave(DOM.formUid.value),
     username: DOM.formUsername.value.trim(),
     role: DOM.formRole.value,
-    dept: DOM.formDept?.value.trim() || '—',
+    dept: DOM.formDept?.value.trim() || "—",
     active: Boolean(DOM.formActive.checked),
   };
 
@@ -652,16 +740,24 @@ async function handleFormSubmit(event) {
 
     if (isEditing) {
       await API.updateCard(State.editingCardId, payload);
-      showToast('Kart güncellendi', `${payload.username} bilgileri kaydedildi.`, 'success');
+      showToast(
+        "Kart güncellendi",
+        `${payload.username} bilgileri kaydedildi.`,
+        "success",
+      );
     } else {
       await API.createCard(payload);
-      showToast('Kart eklendi', `${payload.username} sisteme kaydedildi.`, 'success');
+      showToast(
+        "Kart eklendi",
+        `${payload.username} sisteme kaydedildi.`,
+        "success",
+      );
     }
 
     closeModal();
     await loadCards();
   } catch (error) {
-    showToast('İşlem başarısız', error.message, 'error', 5000);
+    showToast("İşlem başarısız", error.message, "error", 5000);
   } finally {
     setSaveButtonLoading(false);
   }
@@ -669,18 +765,22 @@ async function handleFormSubmit(event) {
 
 function setSaveButtonLoading(isLoading) {
   if (!DOM.modalSaveBtn || !DOM.modalSaveBtnText) return;
-  DOM.modalSaveBtn.classList.toggle('btn--loading', isLoading);
+  DOM.modalSaveBtn.classList.toggle("btn--loading", isLoading);
   DOM.modalSaveBtn.disabled = isLoading;
-  DOM.modalSaveBtnText.textContent = isLoading ? 'Kaydediliyor…' : (State.editingCardId ? 'Değişiklikleri Kaydet' : 'Kartı Kaydet');
+  DOM.modalSaveBtnText.textContent = isLoading
+    ? "Kaydediliyor…"
+    : State.editingCardId
+      ? "Değişiklikleri Kaydet"
+      : "Kartı Kaydet";
 }
 
 function updateActiveLabel() {
   if (!DOM.formActiveLabel || !DOM.formActive) return;
-  DOM.formActiveLabel.textContent = DOM.formActive.checked ? 'Aktif' : 'Pasif';
+  DOM.formActiveLabel.textContent = DOM.formActive.checked ? "Aktif" : "Pasif";
 }
 
 function openDeleteModal(id) {
-  const card = State.cards.find(item => item.id === Number(id));
+  const card = State.cards.find((item) => item.id === Number(id));
   if (!card) return;
 
   State.pendingDeleteId = card.id;
@@ -693,12 +793,12 @@ function openDeleteModal(id) {
   }
 
   if (DOM.deleteBackdrop) DOM.deleteBackdrop.hidden = false;
-  document.body.style.overflow = 'hidden';
+  document.body.style.overflow = "hidden";
 }
 
 function closeDeleteModal() {
   if (DOM.deleteBackdrop) DOM.deleteBackdrop.hidden = true;
-  document.body.style.overflow = '';
+  document.body.style.overflow = "";
   State.pendingDeleteId = null;
 }
 
@@ -706,44 +806,94 @@ async function confirmDelete() {
   if (State.pendingDeleteId === null) return;
 
   const id = State.pendingDeleteId;
-  const card = State.cards.find(item => item.id === id);
+  const card = State.cards.find((item) => item.id === id);
 
   try {
     if (DOM.deleteConfirmBtn) DOM.deleteConfirmBtn.disabled = true;
     await API.deleteCard(id);
     closeDeleteModal();
-    showToast('Kart silindi', `${card?.uid || 'Kart'} sistemden kaldırıldı.`, 'success');
+    showToast(
+      "Kart silindi",
+      `${card?.uid || "Kart"} sistemden kaldırıldı.`,
+      "success",
+    );
     await loadCards();
   } catch (error) {
-    showToast('Silme başarısız', error.message, 'error', 5000);
+    showToast("Silme başarısız", error.message, "error", 5000);
   } finally {
     if (DOM.deleteConfirmBtn) DOM.deleteConfirmBtn.disabled = false;
   }
 }
 
+function openPhotoPicker(id) {
+  const card = State.cards.find((item) => item.id === Number(id));
+
+  if (!card) {
+    showToast(
+      "Kullanıcı bulunamadı",
+      "Fotoğraf yüklenecek kullanıcı bulunamadı.",
+      "error",
+    );
+    return;
+  }
+
+  const input = document.createElement("input");
+  input.type = "file";
+  input.accept = "image/png, image/jpeg, image/jpg";
+
+  input.addEventListener("change", async () => {
+    const file = input.files?.[0];
+
+    if (!file) return;
+
+    try {
+      showToast(
+        "Fotoğraf yükleniyor",
+        `${card.username} için fotoğraf yükleniyor…`,
+        "info",
+        2000,
+      );
+
+      await API.uploadUserPhoto(card.id, file);
+
+      showToast(
+        "Fotoğraf yüklendi",
+        `${card.username} için kayıt fotoğrafı başarıyla güncellendi.`,
+        "success",
+      );
+
+      await loadCards();
+    } catch (error) {
+      showToast("Fotoğraf yüklenemedi", error.message, "error", 5000);
+    }
+  });
+
+  input.click();
+}
+
 async function toggleCardStatus(id) {
-  const card = State.cards.find(item => item.id === Number(id));
+  const card = State.cards.find((item) => item.id === Number(id));
   if (!card) return;
 
   try {
     await API.updateCard(card.id, { ...card, active: !card.active });
     showToast(
-      !card.active ? 'Kart aktifleştirildi' : 'Kart pasifleştirildi',
+      !card.active ? "Kart aktifleştirildi" : "Kart pasifleştirildi",
       `${card.uid} durumu güncellendi.`,
-      'success'
+      "success",
     );
     await loadCards();
   } catch (error) {
-    showToast('Durum güncellenemedi', error.message, 'error', 5000);
+    showToast("Durum güncellenemedi", error.message, "error", 5000);
   }
 }
 
 function handleSort(key) {
   if (State.sortKey === key) {
-    State.sortDir = State.sortDir === 'asc' ? 'desc' : 'asc';
+    State.sortDir = State.sortDir === "asc" ? "desc" : "asc";
   } else {
     State.sortKey = key;
-    State.sortDir = key === 'id' ? 'desc' : 'asc';
+    State.sortDir = key === "id" ? "desc" : "asc";
   }
 
   applyFiltersAndSort();
@@ -751,9 +901,9 @@ function handleSort(key) {
 }
 
 function changePage(value) {
-  if (value === 'prev') {
+  if (value === "prev") {
     State.currentPage = Math.max(1, State.currentPage - 1);
-  } else if (value === 'next') {
+  } else if (value === "next") {
     State.currentPage = Math.min(State.totalPages, State.currentPage + 1);
   } else {
     State.currentPage = Number(value);
@@ -764,24 +914,63 @@ function changePage(value) {
 }
 
 async function fetchAccessLogs() {
-  const response = await fetch('/api/events', {
-    headers: { 'Accept': 'application/json' },
+  const response = await fetch("/api/events", {
+    headers: { Accept: "application/json" },
   });
 
   if (!response.ok) {
-    throw new Error('Giriş logları alınamadı. /api/events endpointini kontrol et.');
+    throw new Error(
+      "Giriş logları alınamadı. /api/events endpointini kontrol et.",
+    );
   }
 
   return await response.json();
 }
 
 function getLogStatusBadge(status) {
-  if (status === 'authorized') {
+  if (status === "authorized") {
     return '<span class="log-badge log-badge--authorized">Yetkili</span>';
   }
 
   return '<span class="log-badge log-badge--unauthorized">Yetkisiz</span>';
 }
+
+function getFaceStatusBadge(log) {
+  if (!log.face_message) {
+    return '<span class="face-badge face-badge--none">Yok</span>';
+  }
+
+  if (Number(log.face_verified) === 1) {
+    return `
+      <span class="face-badge face-badge--verified">
+        Yüz Doğrulandı
+      </span>
+    `;
+  }
+
+  if (log.face_message.includes('uyușmadı') || log.face_message.includes('uyuşmadı')) {
+    return `
+      <span class="face-badge face-badge--danger">
+        Yüz Uyuşmadı
+      </span>
+    `;
+  }
+
+  if (log.face_message.includes('pasif')) {
+    return `
+      <span class="face-badge face-badge--warning">
+        Pasif Kart
+      </span>
+    `;
+  }
+
+  return `
+    <span class="face-badge face-badge--warning">
+      ${esc(log.face_message)}
+    </span>
+  `;
+}
+
 
 function renderAccessLogs(logs) {
   if (!DOM.logsTableContainer) return;
@@ -804,10 +993,40 @@ function renderAccessLogs(logs) {
   const rows = logs.map(log => `
     <tr>
       <td>${esc(log.id)}</td>
-      <td><span class="cell-uid">${esc(log.uid)}</span></td>
-      <td>${getLogStatusBadge(log.status)}</td>
-      <td>${esc(log.message || '-')}</td>
-      <td class="cell-last-access">${esc(log.created_at)}</td>
+
+      <td>
+        <span class="cell-uid">${esc(log.uid)}</span>
+      </td>
+
+      <td>
+        ${getLogStatusBadge(log.status)}
+      </td>
+
+      <td>
+        ${esc(log.message || '-')}
+      </td>
+
+      <td>
+        ${
+          log.photo_path
+            ? `<button class="btn-log-photo" type="button" data-photo="${esc(log.photo_path)}">Fotoğrafı Gör</button>`
+            : `<span class="log-no-photo">Yok</span>`
+        }
+      </td>
+
+      <td>
+        ${getFaceStatusBadge(log)}
+        ${
+          log.face_distance !== null && log.face_distance !== undefined
+          ? `<div class="face-distance">Mesafe: ${Number(log.face_distance).toFixed(4)}</div>`
+          :''
+        }
+      </td>
+
+      <td class="cell-last-access">
+        ${esc(log.created_at)}
+      </td>
+      
     </tr>
   `).join('');
 
@@ -820,6 +1039,8 @@ function renderAccessLogs(logs) {
             <th>Kart UID</th>
             <th>Durum</th>
             <th>Mesaj</th>
+            <th>Fotoğraf</th>
+            <th>Yüz Durumu</th>
             <th>Tarih / Saat</th>
           </tr>
         </thead>
@@ -839,6 +1060,7 @@ function renderAccessLogs(logs) {
       'Son güncelleme: ' + new Date().toLocaleTimeString('tr-TR');
   }
 }
+
 
 async function loadAccessLogs() {
   if (!DOM.logsTableContainer) return;
@@ -864,154 +1086,176 @@ async function loadAccessLogs() {
       </div>
     `;
 
-    document.getElementById('retryLogsBtn')?.addEventListener('click', loadAccessLogs);
+    document
+      .getElementById("retryLogsBtn")
+      ?.addEventListener("click", loadAccessLogs);
   }
 }
 
 function showPage(pageName) {
   State.activePage = pageName;
 
-  document.querySelectorAll('.page').forEach(page => {
+  document.querySelectorAll(".page").forEach((page) => {
     page.hidden = page.id !== `page-${pageName}`;
   });
 
-  DOM.navLinks?.forEach(link => {
+  DOM.navLinks?.forEach((link) => {
     const active = link.dataset.page === pageName;
-    link.classList.toggle('sidebar__nav-link--active', active);
-    if (active) link.setAttribute('aria-current', 'page');
-    else link.removeAttribute('aria-current');
+    link.classList.toggle("sidebar__nav-link--active", active);
+    if (active) link.setAttribute("aria-current", "page");
+    else link.removeAttribute("aria-current");
   });
 
   const titles = {
-    dashboard: 'Genel Bakış',
-    rfid: 'RFID Kart Yönetimi',
-    logs: 'Giriş Logları',
-    reporting: 'Raporlama',
-    settings: 'Ayarlar',
+    dashboard: "Genel Bakış",
+    rfid: "RFID Kart Yönetimi",
+    logs: "Giriş Logları",
+    reporting: "Raporlama",
+    settings: "Ayarlar",
   };
 
-  if (DOM.pageTitle) DOM.pageTitle.textContent = titles[pageName] || 'SecureRoom AI';
+  if (DOM.pageTitle)
+    DOM.pageTitle.textContent = titles[pageName] || "SecureRoom AI";
 
-  if (pageName === 'logs') {
-  loadAccessLogs();
-}
+  if (pageName === "logs") {
+    loadAccessLogs();
+  }
 }
 
 function bindEvents() {
-  DOM.btnRefreshLogs?.addEventListener('click', loadAccessLogs);
-  DOM.btnAddCard?.addEventListener('click', openAddModal);
-  DOM.modalClose?.addEventListener('click', closeModal);
-  DOM.modalCancelBtn?.addEventListener('click', closeModal);
-  DOM.modalBackdrop?.addEventListener('click', event => {
+  DOM.btnRefreshLogs?.addEventListener("click", loadAccessLogs);
+  DOM.btnAddCard?.addEventListener("click", openAddModal);
+  DOM.modalClose?.addEventListener("click", closeModal);
+  DOM.modalCancelBtn?.addEventListener("click", closeModal);
+  DOM.modalBackdrop?.addEventListener("click", (event) => {
     if (event.target === DOM.modalBackdrop) closeModal();
   });
 
-  DOM.cardForm?.addEventListener('submit', handleFormSubmit);
+  DOM.logsTableContainer?.addEventListener('click', event => {
+  const photoBtn = event.target.closest('.btn-log-photo');
 
-  DOM.formUid?.addEventListener('input', event => {
+  if (!photoBtn) {
+    return;
+  }
+
+  const photoPath = photoBtn.dataset.photo;
+  openLogPhotoModal(photoPath);
+});
+
+  DOM.cardForm?.addEventListener("submit", handleFormSubmit);
+
+  DOM.formUid?.addEventListener("input", (event) => {
     event.target.value = formatUIDInput(event.target.value);
   });
 
-  DOM.formActive?.addEventListener('change', updateActiveLabel);
+  DOM.formActive?.addEventListener("change", updateActiveLabel);
 
-  DOM.deleteClose?.addEventListener('click', closeDeleteModal);
-  DOM.deleteCancelBtn?.addEventListener('click', closeDeleteModal);
-  DOM.deleteConfirmBtn?.addEventListener('click', confirmDelete);
-  DOM.deleteBackdrop?.addEventListener('click', event => {
+  DOM.deleteClose?.addEventListener("click", closeDeleteModal);
+  DOM.deleteCancelBtn?.addEventListener("click", closeDeleteModal);
+  DOM.deleteConfirmBtn?.addEventListener("click", confirmDelete);
+  DOM.deleteBackdrop?.addEventListener("click", (event) => {
     if (event.target === DOM.deleteBackdrop) closeDeleteModal();
   });
 
-  DOM.globalSearch?.addEventListener('input', event => {
+  DOM.globalSearch?.addEventListener("input", (event) => {
     State.search = event.target.value;
     State.currentPage = 1;
     applyFiltersAndSort();
     renderTable();
   });
 
-  DOM.filterRole?.addEventListener('change', event => {
+  DOM.filterRole?.addEventListener("change", (event) => {
     State.filterRole = event.target.value;
     State.currentPage = 1;
     applyFiltersAndSort();
     renderTable();
   });
 
-  DOM.filterStatus?.addEventListener('change', event => {
+  DOM.filterStatus?.addEventListener("change", (event) => {
     State.filterStatus = event.target.value;
     State.currentPage = 1;
     applyFiltersAndSort();
     renderTable();
   });
 
-  DOM.tableContainer?.addEventListener('click', event => {
-    const sortHeader = event.target.closest('th[data-sort]');
+  DOM.tableContainer?.addEventListener("click", (event) => {
+    const sortHeader = event.target.closest("th[data-sort]");
     if (sortHeader) {
       handleSort(sortHeader.dataset.sort);
       return;
     }
 
-    const editBtn = event.target.closest('.btn-edit-card');
+    const photoBtn = event.target.closest(".btn-upload-photo");
+    if (photoBtn) {
+      openPhotoPicker(photoBtn.dataset.id);
+      return;
+    }
+
+    const editBtn = event.target.closest(".btn-edit-card");
     if (editBtn) {
       openEditModal(editBtn.dataset.id);
       return;
     }
 
-    const deleteBtn = event.target.closest('.btn-delete-card');
+    const deleteBtn = event.target.closest(".btn-delete-card");
     if (deleteBtn) {
       openDeleteModal(deleteBtn.dataset.id);
       return;
     }
 
-    const toggleBtn = event.target.closest('.btn-toggle-card');
+    const toggleBtn = event.target.closest(".btn-toggle-card");
     if (toggleBtn) {
       toggleCardStatus(toggleBtn.dataset.id);
     }
   });
 
-  DOM.paginationControls?.addEventListener('click', event => {
-    const btn = event.target.closest('.page-btn');
+  DOM.paginationControls?.addEventListener("click", (event) => {
+    const btn = event.target.closest(".page-btn");
     if (!btn || btn.disabled) return;
     changePage(btn.dataset.page);
   });
 
-  DOM.navLinks?.forEach(link => {
-    link.addEventListener('click', event => {
+  DOM.navLinks?.forEach((link) => {
+    link.addEventListener("click", (event) => {
       event.preventDefault();
-      showPage(link.dataset.page || 'rfid');
+      showPage(link.dataset.page || "rfid");
     });
   });
 
-  DOM.sidebarToggle?.addEventListener('click', () => {
-    const isOpen = DOM.sidebar?.classList.toggle('sidebar--open');
-    DOM.sidebarToggle.setAttribute('aria-expanded', String(Boolean(isOpen)));
+  DOM.sidebarToggle?.addEventListener("click", () => {
+    const isOpen = DOM.sidebar?.classList.toggle("sidebar--open");
+    DOM.sidebarToggle.setAttribute("aria-expanded", String(Boolean(isOpen)));
   });
 
-  DOM.notifBtn?.addEventListener('click', event => {
+  DOM.notifBtn?.addEventListener("click", (event) => {
     event.stopPropagation();
     DOM.notifDropdown.hidden = !DOM.notifDropdown.hidden;
     DOM.profileDropdown.hidden = true;
   });
 
-  DOM.profileBtn?.addEventListener('click', event => {
+  DOM.profileBtn?.addEventListener("click", (event) => {
     event.stopPropagation();
     DOM.profileDropdown.hidden = !DOM.profileDropdown.hidden;
     DOM.notifDropdown.hidden = true;
   });
 
-  DOM.markAllRead?.addEventListener('click', () => {
-    document.querySelectorAll('.notif-item--unread').forEach(item => item.classList.remove('notif-item--unread'));
+  DOM.markAllRead?.addEventListener("click", () => {
+    document
+      .querySelectorAll(".notif-item--unread")
+      .forEach((item) => item.classList.remove("notif-item--unread"));
     if (DOM.notifCount) {
-      DOM.notifCount.textContent = '0';
-      DOM.notifCount.classList.add('notif-badge--hidden');
+      DOM.notifCount.textContent = "0";
+      DOM.notifCount.classList.add("notif-badge--hidden");
     }
   });
 
-  document.addEventListener('click', () => {
+  document.addEventListener("click", () => {
     if (DOM.notifDropdown) DOM.notifDropdown.hidden = true;
     if (DOM.profileDropdown) DOM.profileDropdown.hidden = true;
   });
 
-  document.addEventListener('keydown', event => {
-    if (event.key === 'Escape') {
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
       closeModal();
       closeDeleteModal();
       if (DOM.notifDropdown) DOM.notifDropdown.hidden = true;
@@ -1020,11 +1264,50 @@ function bindEvents() {
   });
 }
 
+
+
+function openLogPhotoModal(photoPath) {
+  const existingModal = document.getElementById('logPhotoModal');
+
+  if (existingModal) {
+    existingModal.remove();
+  }
+
+  const modal = document.createElement('div');
+  modal.id = 'logPhotoModal';
+  modal.className = 'log-photo-modal';
+
+  modal.innerHTML = `
+    <div class="log-photo-modal__backdrop"></div>
+    <div class="log-photo-modal__content">
+      <div class="log-photo-modal__header">
+        <h3>Giriş Fotoğrafı</h3>
+        <button class="log-photo-modal__close" type="button">×</button>
+      </div>
+
+      <div class="log-photo-modal__body">
+        <img src="${esc(photoPath)}" alt="Giriş anında çekilen fotoğraf">
+      </div>
+    </div>
+  `;
+
+  document.body.appendChild(modal);
+
+  modal.querySelector('.log-photo-modal__close')?.addEventListener('click', () => {
+    modal.remove();
+  });
+
+  modal.querySelector('.log-photo-modal__backdrop')?.addEventListener('click', () => {
+    modal.remove();
+  });
+}
+
+
 function init() {
   bindEvents();
   updateActiveLabel();
-  showPage('rfid');
+  showPage("rfid");
   loadCards();
 }
 
-document.addEventListener('DOMContentLoaded', init);
+document.addEventListener("DOMContentLoaded", init);

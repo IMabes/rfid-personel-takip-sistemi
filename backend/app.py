@@ -1,37 +1,97 @@
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, jsonify, render_template, send_from_directory
 from flask_cors import CORS
+from pathlib import Path
 import sqlite3
 from datetime import datetime
-
-from flask import Flask, request, jsonify, send_from_directory
-import sqlite3
 import os
+from werkzeug.utils import secure_filename
+from uuid import uuid4
 
-BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+from face_service import compare_faces
+
+
+# =========================
+# PATH / FLASK AYARLARI
+# =========================
+BACKEND_DIR = Path(__file__).resolve().parent
+PROJECT_DIR = BACKEND_DIR.parent
+
+FRONTEND_DIR = PROJECT_DIR / "frontend"
+TEMPLATE_DIR = FRONTEND_DIR / "templates"
+STATIC_DIR = FRONTEND_DIR / "static"
+FRONTEND_STATIC_DIR = str(STATIC_DIR)
 
 app = Flask(
     __name__,
-    static_folder=os.path.join(BASE_DIR, "frontend", "static"),
+    template_folder=str(TEMPLATE_DIR),
+    static_folder=str(STATIC_DIR),
     static_url_path="/static"
 )
 
-
-
-
 CORS(app)
 
+
+# =========================
+# PROJE AYARLARI
+# =========================
+DB_PATH = BACKEND_DIR / "secureroom.db"
 DB_NAME = "secureroom.db"
 API_KEY = "secureroom123"
 
+@app.route("/")
+def index():
+    # index.html proje ana dizininde duruyor
+    return send_from_directory(str(PROJECT_DIR), "index.html")
+
+
+@app.route("/admin")
+def admin():
+    # adminpanel.html frontend/templates içinde duruyor
+    return render_template("adminpanel.html")
+
+
+# =========================
+# UPLOAD AYARLARI
+# =========================
+UPLOAD_FOLDER = STATIC_DIR / "uploads" / "users"
+ACCESS_LOG_UPLOAD_FOLDER = STATIC_DIR / "uploads" / "access_logs"
+ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg"}
+
+UPLOAD_FOLDER.mkdir(parents=True, exist_ok=True)
+ACCESS_LOG_UPLOAD_FOLDER.mkdir(parents=True, exist_ok=True)
+
 
 def get_db_connection():
-    conn = sqlite3.connect(DB_NAME)
+    conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row
     return conn
+
+def normalize_uid(uid):
+    if not uid:
+        return ""
+
+    return (
+        uid.upper()
+        .replace(":", " ")
+        .replace("-", " ")
+        .strip()
+    )
+
+def allowed_file(filename):
+    return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
+def add_column_if_not_exists(conn, table_name, column_name, column_definition):
+    try:
+        conn.execute(f"ALTER TABLE {table_name} ADD COLUMN {column_name} {column_definition}")
+    except sqlite3.OperationalError:
+        # Kolon zaten varsa SQLite hata verir; bunu normal kabul ediyoruz.
+        pass
 
 
 def create_database():
     conn = get_db_connection()
+
     conn.execute("""
         CREATE TABLE IF NOT EXISTS events (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -41,8 +101,12 @@ def create_database():
             created_at TEXT NOT NULL
         )
     """)
-    
-    
+
+    add_column_if_not_exists(conn, "events", "photo_path", "TEXT")
+    add_column_if_not_exists(conn, "events", "face_verified", "INTEGER DEFAULT 0")
+    add_column_if_not_exists(conn, "events", "face_distance", "REAL")
+    add_column_if_not_exists(conn, "events", "face_message", "TEXT")
+
     conn.execute("""
         CREATE TABLE IF NOT EXISTS users (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -53,18 +117,11 @@ def create_database():
             created_at TEXT NOT NULL
         )
     """)
-    
+
+    add_column_if_not_exists(conn, "users", "photo_path", "TEXT")
+
     conn.commit()
     conn.close()
-
-
-@app.route("/")
-def index():
-    return send_from_directory(BASE_DIR, "index.html")
-
-@app.route("/admin")
-def admin_panel():
-    return send_from_directory(os.path.join(BASE_DIR, "frontend/templates"), "adminpanel.html")
 
 
 @app.route("/api/event", methods=["POST"])
@@ -129,7 +186,8 @@ def get_events():
             "uid": event["uid"],
             "status": event["status"],
             "message": event["message"],
-            "created_at": event["created_at"]
+            "created_at": event["created_at"],
+            "photo_path": event["photo_path"] if "photo_path" in event.keys() else None
         })
 
     return jsonify(event_list)
@@ -175,7 +233,8 @@ def get_users():
             "uid": user["uid"],
             "role": user["role"],
             "is_active": user["is_active"],
-            "created_at": user["created_at"]
+            "created_at": user["created_at"],
+            "photo_path": user["photo_path"] if "photo_path" in user.keys() else None
         })
 
     return jsonify(user_list)
@@ -247,10 +306,12 @@ def update_user(user_id):
             "message": "name ve uid zorunludur"
         }), 400
 
-    uid = uid.upper().replace(":", " ").strip()
+    uid = normalize_uid(uid)
 
     try:
         conn = get_db_connection()
+        
+        
 
         user = conn.execute("""
             SELECT * FROM users WHERE id = ?
@@ -346,6 +407,67 @@ def toggle_user_status(user_id):
         "is_active": new_status
     })
     
+    
+    
+@app.route("/api/users/<int:user_id>/photo", methods=["POST"])
+def upload_user_photo(user_id):
+    if "photo" not in request.files:
+        return jsonify({
+            "success": False,
+            "message": "Fotoğraf dosyası gönderilmedi"
+        }), 400
+
+    file = request.files["photo"]
+
+    if file.filename == "":
+        return jsonify({
+            "success": False,
+            "message": "Dosya seçilmedi"
+        }), 400
+
+    if not allowed_file(file.filename):
+        return jsonify({
+            "success": False,
+            "message": "Sadece png, jpg veya jpeg dosyaları yüklenebilir"
+        }), 400
+
+    conn = get_db_connection()
+    
+    def normalize_uid(uid):
+        return uid.upper().replace(":", " ").replace("-", " ").strip()
+
+    user = conn.execute("""
+        SELECT * FROM users WHERE id = ?
+    """, (user_id,)).fetchone()
+
+    if not user:
+        conn.close()
+        return jsonify({
+            "success": False,
+            "message": "Kullanıcı bulunamadı"
+        }), 404
+
+    filename = secure_filename(f"user_{user_id}_{file.filename}")
+    save_path = os.path.join(UPLOAD_FOLDER, filename)
+    file.save(save_path)
+
+    photo_path = f"/static/uploads/users/{filename}"
+
+    conn.execute("""
+        UPDATE users
+        SET photo_path = ?
+        WHERE id = ?
+    """, (photo_path, user_id))
+
+    conn.commit()
+    conn.close()
+
+    return jsonify({
+        "success": True,
+        "message": "Kullanıcı fotoğrafı yüklendi",
+        "photo_path": photo_path
+    })
+    
 
 @app.route("/api/check-card", methods=["POST"])
 def check_card():
@@ -377,7 +499,7 @@ def check_card():
         }), 400
 
     # UID formatını standartlaştırıyoruz
-    uid = uid.upper().replace(":", " ").strip()
+    uid = normalize_uid(uid)
 
     conn = get_db_connection()
 
@@ -466,6 +588,128 @@ def test_event():
         "success": True,
         "message": "Test kaydı oluşturuldu"
     })
+    
+    
+@app.route("/api/check-card-photo", methods=["POST"])
+def check_card_photo():
+    api_key = request.headers.get("X-API-Key")
+
+    if api_key != API_KEY:
+        return jsonify({
+            "success": False,
+            "authorized": False,
+            "message": "Geçersiz API anahtarı"
+        }), 401
+
+    uid = request.headers.get("X-Card-UID")
+
+    if not uid:
+        return jsonify({
+            "success": False,
+            "authorized": False,
+            "message": "Kart UID gönderilmedi"
+        }), 400
+
+    photo_bytes = request.get_data()
+
+    if not photo_bytes:
+        return jsonify({
+            "success": False,
+            "authorized": False,
+            "message": "Fotoğraf verisi gönderilmedi"
+        }), 400
+
+    uid = normalize_uid(uid)
+    created_at = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+    filename = f"access_{datetime.now().strftime('%Y%m%d_%H%M%S')}_{uuid4().hex[:8]}.jpg"
+    save_path = os.path.join(ACCESS_LOG_UPLOAD_FOLDER, filename)
+
+    with open(save_path, "wb") as f:
+        f.write(photo_bytes)
+
+    photo_path = f"/static/uploads/access_logs/{filename}"
+
+    conn = get_db_connection()
+
+    user = conn.execute("""
+        SELECT * FROM users
+        WHERE uid = ?
+    """, (uid,)).fetchone()
+
+    face_verified = 0
+    face_distance = None
+    face_message = None
+
+    if not user:
+        status = "unauthorized"
+        message = "Kayıtsız kart denemesi"
+        authorized = False
+        face_message = "Kart kayıtlı olmadığı için yüz kontrolü yapılmadı"
+
+    elif user["is_active"] != 1:
+        status = "unauthorized"
+        message = f"Pasif kart denemesi: {user['name']}"
+        authorized = False
+        face_message = "Kart pasif olduğu için yüz kontrolü yapılmadı"
+
+    else:
+        user_photo_path = user["photo_path"] if "photo_path" in user.keys() else None
+
+        if not user_photo_path:
+            status = "unauthorized"
+            message = f"Kullanıcının kayıtlı yüz fotoğrafı yok: {user['name']}"
+            authorized = False
+            face_message = "Kayıtlı kullanıcı fotoğrafı yok"
+
+        else:
+            face_result = compare_faces(
+                user_photo_path,
+                photo_path,
+                FRONTEND_STATIC_DIR
+            )
+
+            face_verified = 1 if face_result["verified"] else 0
+            face_distance = face_result.get("distance")
+            face_message = face_result.get("message")
+
+            if face_result["verified"]:
+                status = "authorized"
+                message = f"{user['name']} yüz doğrulamasıyla giriş yaptı"
+                authorized = True
+            else:
+                status = "unauthorized"
+                message = f"Kart doğru ama yüz uyuşmadı: {user['name']} adına şüpheli giriş"
+                authorized = False
+
+    conn.execute("""
+        INSERT INTO events (
+            uid, status, message, created_at, photo_path,
+            face_verified, face_distance, face_message
+        )
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    """, (
+        uid, status, message, created_at, photo_path,
+        face_verified, face_distance, face_message
+    ))
+
+    conn.commit()
+    conn.close()
+
+    return jsonify({
+        "success": True,
+        "authorized": authorized,
+        "uid": uid,
+        "status": status,
+        "message": message,
+        "photo_path": photo_path,
+        "face_verified": face_verified,
+        "face_distance": face_distance,
+        "face_message": face_message
+    }), 200
+    
+    
+
 
 
 if __name__ == "__main__":

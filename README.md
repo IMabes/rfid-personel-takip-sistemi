@@ -482,25 +482,10 @@ Bu proje geliştirilirken aşağıdaki konularda pratik deneyim kazanılmıştı
 
 ---
 
-## Geliştirici
-
-<div align="center">
-
-### İrem Kılıçer
-
-Yazılım, IoT, yapay zekâ ve güvenlik sistemleri üzerine projeler geliştirmeye odaklanan geliştirici adayı.
-
-Bu proje; donanım, yazılım, web arayüzü ve güvenlik mantığını bir araya getiren uçtan uca bir IoT uygulaması olarak geliştirilmiştir.
-
-</div>
-
----
-
 ## Lisans
 
 Bu proje eğitim, öğrenme ve geliştirme amacıyla hazırlanmıştır.
 
-İlerleyen aşamalarda açık kaynak lisansı eklenebilir.
 
 ---
 
